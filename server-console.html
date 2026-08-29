@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>BASIT HOST - Console</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0e14;
+            color: #00ff88;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            opacity: 0.06;
+        }
+        .matrix-bg span {
+            position: absolute;
+            font-size: 14px;
+            color: #00ff88;
+            animation: matrixDrop linear infinite;
+            white-space: nowrap;
+        }
+        @keyframes matrixDrop {
+            0% { transform: translateY(-100vh); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            border-bottom: 2px solid rgba(0, 255, 136, 0.15);
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .logo {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 0 40px rgba(0, 255, 136, 0.2);
+        }
+        .header .logo span { color: #ffffff; opacity: 0.3; font-weight: 300; }
+
+        .header .back-btn {
+            background: rgba(0, 255, 136, 0.06);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            padding: 8px 22px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+        .header .back-btn:hover { background: rgba(0, 255, 136, 0.12); }
+
+        .header .server-info {
+            font-size: 14px;
+            opacity: 0.6;
+            letter-spacing: 1px;
+        }
+        .header .server-info strong { color: #00ff88; opacity: 1; }
+
+        /* Console */
+        .console-container {
+            background: rgba(10, 14, 20, 0.92);
+            border: 2px solid rgba(0, 255, 136, 0.12);
+            border-radius: 16px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            min-height: 400px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .console-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .console-container::-webkit-scrollbar-track {
+            background: rgba(0, 255, 136, 0.05);
+            border-radius: 4px;
+        }
+        .console-container::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 136, 0.3);
+            border-radius: 4px;
+        }
+
+        .console-line {
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            padding: 2px 0;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.03);
+            animation: consoleFade 0.3s ease;
+        }
+        .console-line .timestamp {
+            color: rgba(0, 255, 136, 0.3);
+            margin-right: 12px;
+        }
+        .console-line .output { color: #00ff88; }
+        .console-line .output.error { color: #ff4757; }
+        .console-line .output.warning { color: #ffbd2e; }
+        .console-line .output.input { color: #4488ff; }
+
+        @keyframes consoleFade {
+            0% { opacity: 0; transform: translateX(-10px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        .console-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 20px auto;
+            max-width: 1200px;
+            position: relative;
+            z-index: 1;
+        }
+        .console-actions button {
+            background: rgba(0, 255, 136, 0.06);
+            border: 2px solid rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            padding: 12px 28px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            flex: 1;
+            max-width: 180px;
+        }
+        .console-actions button:hover {
+            background: rgba(0, 255, 136, 0.12);
+            border-color: #00ff88;
+        }
+        .console-actions button.danger {
+            border-color: rgba(255, 71, 87, 0.3);
+            color: #ff4757;
+        }
+        .console-actions button.danger:hover {
+            background: rgba(255, 71, 87, 0.15);
+            border-color: #ff4757;
+        }
+        .console-actions button.success {
+            border-color: rgba(0, 255, 136, 0.4);
+            color: #00ff88;
+        }
+        .console-actions button.success:hover {
+            background: rgba(0, 255, 136, 0.15);
+        }
+
+        .console-status {
+            text-align: center;
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin: 10px auto;
+            max-width: 1200px;
+            position: relative;
+            z-index: 1;
+        }
+        .console-status .status-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        .status-dot.running {
+            background: #00ff88;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+            animation: pulse 1.5s infinite;
+        }
+        .status-dot.stopped {
+            background: #ff4757;
+            box-shadow: 0 0 30px rgba(255, 71, 87, 0.3);
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .console-input-area {
+            max-width: 1200px;
+            margin: 10px auto;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            gap: 10px;
+        }
+        .console-input-area input {
+            flex: 1;
+            background: rgba(0, 255, 136, 0.04);
+            border: 2px solid rgba(0, 255, 136, 0.15);
+            border-radius: 10px;
+            padding: 14px 18px;
+            font-size: 15px;
+            color: #00ff88;
+            font-family: 'Courier New', monospace;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .console-input-area input:focus {
+            border-color: #00ff88;
+        }
+        .console-input-area input::placeholder {
+            color: rgba(0, 255, 136, 0.2);
+        }
+        .console-input-area button {
+            background: rgba(0, 255, 136, 0.06);
+            border: 2px solid rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            padding: 14px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+        .console-input-area button:hover {
+            background: rgba(0, 255, 136, 0.12);
+            border-color: #00ff88;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10,14,20,0.95);
+            border: 2px solid rgba(0,255,136,0.2);
+            color: #00ff88;
+            padding: 16px 35px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            letter-spacing: 1px;
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .header { flex-direction: column; align-items: stretch; text-align: center; }
+            .console-actions button { max-width: 100%; }
+            .console-input-area { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Matrix Background -->
+    <div class="matrix-bg" id="matrixBg"></div>
+
+    <div class="header">
+        <div class="logo">𝗕𝗔𝗦𝗜𝗧 𝗛𝗢𝗦𝗧 <span>// CONSOLE</span></div>
+        <div class="server-info" id="serverInfo">Server: <strong id="serverNameDisplay">Loading...</strong></div>
+        <button class="back-btn" onclick="goBack()">⬅ BACK</button>
+    </div>
+
+    <div class="console-status" id="consoleStatus">
+        <span class="status-dot stopped" id="statusDot"></span>
+        <span id="statusText">STOPPED</span>
+    </div>
+
+    <div class="console-actions">
+        <button class="success" id="startBtn" onclick="startServer()">▶ START</button>
+        <button id="stopBtn" onclick="stopServer()">⏹ STOP</button>
+        <button id="restartBtn" onclick="restartServer()">🔄 RESTART</button>
+        <button class="danger" onclick="clearConsole()">🗑 CLEAR</button>
+    </div>
+
+    <div class="console-container" id="consoleContainer"></div>
+
+    <div class="console-input-area">
+        <input type="text" id="consoleInput" placeholder="▸ Type a command..." />
+        <button onclick="sendCommand()">⏎ SEND</button>
+    </div>
+
+    <script>
+        // Matrix Rain
+        (function() {
+            const bg = document.getElementById('matrixBg');
+            const chars = '0123456789ABCDEF';
+            for (let i = 0; i < 80; i++) {
+                const span = document.createElement('span');
+                span.textContent = chars[Math.floor(Math.random() * chars.length)];
+                span.style.left = Math.random() * 100 + '%';
+                span.style.fontSize = (10 + Math.random() * 20) + 'px';
+                span.style.animationDuration = (5 + Math.random() * 15) + 's';
+                span.style.animationDelay = (Math.random() * 15) + 's';
+                span.style.opacity = 0.3 + Math.random() * 0.5;
+                bg.appendChild(span);
+            }
+        })();
+
+        // Get server ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const serverId = parseInt(urlParams.get('id'));
+
+        let server = null;
+        let isRunning = false;
+        let consoleLines = [];
+        let commandHistory = [];
+        let historyIndex = -1;
+
+        function loadServer() {
+            const saved = localStorage.getItem('basit_servers');
+            if (saved) {
+                const servers = JSON.parse(saved);
+                server = servers.find(s => s.id === serverId);
+                if (server) {
+                    document.getElementById('serverNameDisplay').textContent = server.name;
+                    isRunning = server.status === 'running';
+                    updateStatus();
+                    if (isRunning) {
+                        addConsoleLine('🟢 System', 'Server started successfully!', 'output');
+                        addConsoleLine('📌 Info', `Runtime: ${server.runtime} | File: ${server.file}`, 'output');
+                        addConsoleLine('📌 Info', 'Ready to accept commands...', 'output');
+                    } else {
+                        addConsoleLine('🔴 System', 'Server is stopped. Click START to begin.', 'warning');
+                    }
+                } else {
+                    document.getElementById('serverNameDisplay').textContent = 'Not Found';
+                    addConsoleLine('❌ Error', 'Server not found!', 'error');
+                }
+            }
+        }
+
+        function updateStatus() {
+            const dot = document.getElementById('statusDot');
+            const text = document.getElementById('statusText');
+            if (isRunning) {
+                dot.className = 'status-dot running';
+                text.textContent = 'RUNNING';
+                text.style.color = '#00ff88';
+            } else {
+                dot.className = 'status-dot stopped';
+                text.textContent = 'STOPPED';
+                text.style.color = '#ff4757';
+            }
+        }
+
+        function addConsoleLine(timestamp, message, type = 'output') {
+            const container = document.getElementById('consoleContainer');
+            const line = document.createElement('div');
+            line.className = 'console-line';
+            const time = new Date().toLocaleTimeString();
+            line.innerHTML = `
+                <span class="timestamp">[${time}]</span>
+                <span class="${type}">${message}</span>
+            `;
+            container.appendChild(line);
+            container.scrollTop = container.scrollHeight;
+            consoleLines.push({ timestamp: time, message, type });
+        }
+
+        function startServer() {
+            if (isRunning) {
+                showToast('⚠️ Server is already running!');
+                return;
+            }
+            isRunning = true;
+            updateStatus();
+            addConsoleLine('🟢 System', 'Starting server...', 'output');
+            setTimeout(() => {
+                addConsoleLine('✅ System', `Server started successfully! (${server.runtime} ${server.file})`, 'output');
+                addConsoleLine('📌 Info', 'Server is now listening for commands...', 'output');
+                // Update server status in localStorage
+                updateServerStatus('running');
+                showToast('✅ Server started!');
+            }, 800);
+        }
+
+        function stopServer() {
+            if (!isRunning) {
+                showToast('⚠️ Server is already stopped!');
+                return;
+            }
+            isRunning = false;
+            updateStatus();
+            addConsoleLine('🔴 System', 'Stopping server...', 'warning');
+            setTimeout(() => {
+                addConsoleLine('⏹ System', 'Server stopped successfully!', 'output');
+                updateServerStatus('stopped');
+                showToast('⏹ Server stopped!');
+            }, 600);
+        }
+
+        function restartServer() {
+            addConsoleLine('🔄 System', 'Restarting server...', 'warning');
+            isRunning = false;
+            updateStatus();
+            setTimeout(() => {
+                isRunning = true;
+                updateStatus();
+                addConsoleLine('✅ System', 'Server restarted successfully!', 'output');
+                updateServerStatus('running');
+                showToast('🔄 Server restarted!');
+            }, 1000);
+        }
+
+        function updateServerStatus(status) {
+            const saved = localStorage.getItem('basit_servers');
+            if (saved) {
+                const servers = JSON.parse(saved);
+                const idx = servers.findIndex(s => s.id === serverId);
+                if (idx !== -1) {
+                    servers[idx].status = status;
+                    localStorage.setItem('basit_servers', JSON.stringify(servers));
+                }
+            }
+        }
+
+        function clearConsole() {
+            document.getElementById('consoleContainer').innerHTML = '';
+            consoleLines = [];
+            addConsoleLine('🗑 System', 'Console cleared!', 'warning');
+        }
+
+        function sendCommand() {
+            const input = document.getElementById('consoleInput');
+            const cmd = input.value.trim();
+            if (!cmd) return;
+            if (!isRunning) {
+                addConsoleLine('⚠️ System', 'Server is stopped! Start the server first.', 'warning');
+                input.value = '';
+                return;
+            }
+            addConsoleLine('> Input', cmd, 'input');
+            commandHistory.push(cmd);
+            historyIndex = commandHistory.length;
+
+            // Simulate command execution
+            setTimeout(() => {
+                if (cmd.toLowerCase() === 'help') {
+                    addConsoleLine('📌 Help', 'Available commands: help, status, ping, echo [text]', 'output');
+                } else if (cmd.toLowerCase() === 'status') {
+                    addConsoleLine('📊 Status', `Server: ${server.name} | Runtime: ${server.runtime} | Status: ${isRunning ? 'RUNNING' : 'STOPPED'}`, 'output');
+                } else if (cmd.toLowerCase() === 'ping') {
+                    addConsoleLine('🏓 Pong', 'Response time: ' + (Math.random() * 50 + 10).toFixed(0) + 'ms', 'output');
+                } else if (cmd.toLowerCase().startsWith('echo ')) {
+                    addConsoleLine('📢 Echo', cmd.substring(5), 'output');
+                } else {
+                    addConsoleLine('❌ Error', `Unknown command: "${cmd}". Type "help" for available commands.`, 'error');
+                }
+            }, 300);
+
+            input.value = '';
+        }
+
+        // Enter key for command
+        document.getElementById('consoleInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                sendCommand();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    this.value = commandHistory[historyIndex] || '';
+                }
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    this.value = commandHistory[historyIndex] || '';
+                } else {
+                    historyIndex = commandHistory.length;
+                    this.value = '';
+                }
+            }
+        });
+
+        function goBack() {
+            window.location.href = '/dashboard.html';
+        }
+
+        function showToast(message) {
+            const existing = document.querySelector('.toast');
+            if (existing) existing.remove();
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.5s';
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        // Load
+        loadServer();
+    </script>
+</body>
+</html>
