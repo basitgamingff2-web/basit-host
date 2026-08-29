@@ -6,7 +6,7 @@
     <title>BASIT HOST</title>
     <style>
         /* ============================================
-           RESET & BASE
+           FULL CYBER THEME
            ============================================ */
         * {
             margin: 0;
@@ -26,85 +26,86 @@
             position: relative;
         }
 
-        /* ============================================
-           BACKGROUND GLOW EFFECTS
-           ============================================ */
+        /* Background Matrix Rain */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            opacity: 0.15;
+        }
+
+        .matrix-bg span {
+            position: absolute;
+            font-size: 14px;
+            color: #00ff88;
+            animation: matrixDrop linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes matrixDrop {
+            0% { transform: translateY(-100vh); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
         .bg-glow {
             position: fixed;
             border-radius: 50%;
             filter: blur(100px);
-            opacity: 0.15;
+            opacity: 0.12;
             z-index: 0;
         }
-        .bg-glow.g1 {
-            width: 500px;
-            height: 500px;
-            top: -100px;
-            left: -100px;
-            background: #00ff88;
-        }
-        .bg-glow.g2 {
-            width: 400px;
-            height: 400px;
-            bottom: -100px;
-            right: -100px;
-            background: #00aaff;
-        }
-        .bg-glow.g3 {
-            width: 300px;
-            height: 300px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #ff00aa;
-        }
+        .bg-glow.g1 { width: 600px; height: 600px; top: -200px; left: -200px; background: #00ff88; }
+        .bg-glow.g2 { width: 500px; height: 500px; bottom: -200px; right: -200px; background: #00aaff; }
+        .bg-glow.g3 { width: 400px; height: 400px; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ff00aa; }
 
-        /* ============================================
-           TERMINAL CONTAINER
-           ============================================ */
         .terminal {
             background: rgba(10, 14, 20, 0.92);
-            border: 1px solid rgba(0, 255, 136, 0.25);
-            border-radius: 16px;
-            padding: 30px 40px 40px 40px;
-            width: 520px;
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            border-radius: 20px;
+            padding: 40px 50px 50px 50px;
+            width: 560px;
             max-width: 94vw;
-            box-shadow: 0 0 60px rgba(0, 255, 136, 0.08), inset 0 0 60px rgba(0, 255, 136, 0.03);
-            backdrop-filter: blur(12px);
+            box-shadow: 0 0 80px rgba(0, 255, 136, 0.08), inset 0 0 80px rgba(0, 255, 136, 0.03);
+            backdrop-filter: blur(16px);
             position: relative;
             z-index: 1;
         }
 
-        /* ============================================
-           HEADER
-           ============================================ */
         .terminal-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid rgba(0, 255, 136, 0.15);
-            padding-bottom: 14px;
-            margin-bottom: 22px;
+            border-bottom: 2px solid rgba(0, 255, 136, 0.15);
+            padding-bottom: 16px;
+            margin-bottom: 24px;
         }
+
         .terminal-title {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 700;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             color: #00ff88;
-            text-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+            text-shadow: 0 0 40px rgba(0, 255, 136, 0.3);
         }
         .terminal-title span {
             color: #ffffff;
-            opacity: 0.4;
+            opacity: 0.3;
             font-weight: 300;
         }
+
         .terminal-dots {
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
         .terminal-dots span {
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
             display: inline-block;
         }
@@ -112,241 +113,176 @@
         .dot-yellow { background: #ffbd2e; }
         .dot-green { background: #27c93f; }
 
-        /* ============================================
-           VERSION TAG
-           ============================================ */
         .version-tag {
             text-align: center;
-            font-size: 11px;
+            font-size: 12px;
             color: rgba(0, 255, 136, 0.4);
-            letter-spacing: 3px;
-            margin-bottom: 20px;
+            letter-spacing: 4px;
+            margin-bottom: 22px;
             border: 1px solid rgba(0, 255, 136, 0.08);
-            padding: 6px 0;
-            border-radius: 6px;
+            padding: 8px 0;
+            border-radius: 8px;
             background: rgba(0, 255, 136, 0.03);
         }
 
-        /* ============================================
-           ACCESS PROMPT
-           ============================================ */
         .access-prompt {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            margin-bottom: 28px;
+            gap: 8px;
+            margin-bottom: 30px;
         }
         .access-prompt .line {
-            font-size: 15px;
-            letter-spacing: 1px;
+            font-size: 16px;
+            letter-spacing: 2px;
             opacity: 0.7;
         }
         .access-prompt .line.highlight {
             color: #ffffff;
             opacity: 1;
             font-weight: 600;
+            font-size: 18px;
         }
         .access-prompt .line .cursor-blink {
             display: inline-block;
-            width: 10px;
-            height: 20px;
+            width: 12px;
+            height: 22px;
             background: #00ff88;
             animation: blink 1s step-end infinite;
             vertical-align: text-bottom;
-            margin-left: 2px;
+            margin-left: 4px;
         }
 
-        /* ============================================
-           LOGIN FORM
-           ============================================ */
         .login-form {
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            margin-top: 6px;
+            gap: 16px;
+            margin-top: 8px;
         }
         .login-form label {
-            font-size: 13px;
+            font-size: 14px;
             color: rgba(0, 255, 136, 0.5);
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-transform: uppercase;
         }
         .login-form input {
             background: rgba(0, 255, 136, 0.04);
-            border: 1px solid rgba(0, 255, 136, 0.2);
-            border-radius: 8px;
-            padding: 14px 18px;
-            font-size: 16px;
+            border: 2px solid rgba(0, 255, 136, 0.2);
+            border-radius: 10px;
+            padding: 16px 20px;
+            font-size: 18px;
             color: #00ff88;
             font-family: 'Courier New', monospace;
             outline: none;
             transition: all 0.3s ease;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
         }
         .login-form input:focus {
             border-color: #00ff88;
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.08);
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.08);
             background: rgba(0, 255, 136, 0.07);
         }
         .login-form input::placeholder {
-            color: rgba(0, 255, 136, 0.2);
+            color: rgba(0, 255, 136, 0.15);
         }
 
-        /* ============================================
-           BUTTONS
-           ============================================ */
         .btn-login {
             background: rgba(0, 255, 136, 0.06);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 8px;
-            padding: 14px;
-            font-size: 16px;
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            border-radius: 10px;
+            padding: 16px;
+            font-size: 18px;
             font-weight: 700;
             color: #00ff88;
             font-family: 'Courier New', monospace;
-            letter-spacing: 4px;
+            letter-spacing: 6px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
-            margin-top: 6px;
+            margin-top: 8px;
         }
         .btn-login:hover {
             background: rgba(0, 255, 136, 0.12);
             border-color: #00ff88;
-            box-shadow: 0 0 40px rgba(0, 255, 136, 0.1);
+            box-shadow: 0 0 60px rgba(0, 255, 136, 0.1);
         }
-        .btn-login:active {
-            transform: scale(0.97);
-        }
+        .btn-login:active { transform: scale(0.97); }
 
-        /* ============================================
-           ERROR MESSAGE
-           ============================================ */
         .error-msg {
             color: #ff4757;
-            font-size: 13px;
+            font-size: 14px;
             text-align: center;
-            margin-top: 6px;
-            height: 24px;
+            margin-top: 8px;
+            height: 26px;
             opacity: 0;
             transition: opacity 0.4s ease;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
         }
-        .error-msg.show {
-            opacity: 1;
-        }
+        .error-msg.show { opacity: 1; }
 
-        /* ============================================
-           FOOTER
-           ============================================ */
         .terminal-footer {
-            border-top: 1px solid rgba(0, 255, 136, 0.08);
-            padding-top: 16px;
-            margin-top: 22px;
+            border-top: 2px solid rgba(0, 255, 136, 0.08);
+            padding-top: 18px;
+            margin-top: 24px;
             display: flex;
             justify-content: space-between;
-            font-size: 11px;
-            color: rgba(0, 255, 136, 0.25);
-            letter-spacing: 1px;
+            font-size: 12px;
+            color: rgba(0, 255, 136, 0.2);
+            letter-spacing: 2px;
         }
-        .terminal-footer span {
-            color: rgba(0, 255, 136, 0.4);
-        }
+        .terminal-footer span { color: rgba(0, 255, 136, 0.35); }
 
-        /* ============================================
-           ANIMATIONS
-           ============================================ */
         @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
 
-        /* ============================================
-           RESPONSIVE
-           ============================================ */
-        @media (max-width: 550px) {
-            .terminal {
-                padding: 20px;
-                border-radius: 12px;
-            }
-            .terminal-title {
-                font-size: 16px;
-            }
-            .access-prompt .line {
-                font-size: 13px;
-            }
-            .login-form input {
-                font-size: 14px;
-                padding: 12px 14px;
-            }
-            .btn-login {
-                font-size: 14px;
-                padding: 12px;
-            }
-        }
-
-        /* ============================================
-           LOADING SPINNER
-           ============================================ */
         .loader {
             display: none;
-            margin: 10px auto 0;
-            width: 30px;
-            height: 30px;
+            margin: 12px auto 0;
+            width: 35px;
+            height: 35px;
             border: 3px solid rgba(0, 255, 136, 0.1);
             border-top: 3px solid #00ff88;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
-        .loader.show {
-            display: block;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        .loader.show { display: block; }
+        @keyframes spin { 0% { transform: rotate(0); } 100% { transform: rotate(360deg); } }
 
-        /* ============================================
-           SUCCESS MESSAGE
-           ============================================ */
         .success-msg {
             display: none;
             text-align: center;
             color: #00ff88;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             padding: 20px 0;
             animation: fadeIn 0.6s ease;
         }
-        .success-msg.show {
-            display: block;
-        }
-        @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(10px); }
-            100% { opacity: 1; transform: translateY(0); }
+        .success-msg.show { display: block; }
+        @keyframes fadeIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 600px) {
+            .terminal { padding: 20px; border-radius: 14px; }
+            .terminal-title { font-size: 18px; }
+            .access-prompt .line { font-size: 14px; }
+            .login-form input { font-size: 16px; padding: 14px 16px; }
+            .btn-login { font-size: 16px; padding: 14px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ============================================
-    BACKGROUND GLOW
-    ============================================ -->
+    <!-- Matrix Background -->
+    <div class="matrix-bg" id="matrixBg"></div>
+
     <div class="bg-glow g1"></div>
     <div class="bg-glow g2"></div>
     <div class="bg-glow g3"></div>
 
-    <!-- ============================================
-    TERMINAL
-    ============================================ -->
-    <div class="terminal" id="terminal">
-
-        <!-- Header -->
+    <div class="terminal">
         <div class="terminal-header">
-            <div class="terminal-title">
-                𝗕𝗔𝗦𝗜𝗧 𝗛𝗢𝗦𝗧 <span>// SECURE</span>
-            </div>
+            <div class="terminal-title">𝗕𝗔𝗦𝗜𝗧 𝗛𝗢𝗦𝗧 <span>// SECURE</span></div>
             <div class="terminal-dots">
                 <span class="dot-red"></span>
                 <span class="dot-yellow"></span>
@@ -354,139 +290,106 @@
             </div>
         </div>
 
-        <!-- Version -->
-        <div class="version-tag">
-            ⚡ SECURE TERMINAL v3.0 ⚡
-        </div>
+        <div class="version-tag">⚡ SECURE TERMINAL v4.0 ⚡</div>
 
-        <!-- Access Prompt -->
         <div class="access-prompt">
             <div class="line highlight">> ACCESS_REQUEST</div>
             <div class="line" style="opacity:0.3;">• ENTER ACCESS CODE •</div>
         </div>
 
-        <!-- Login Form -->
-        <form class="login-form" id="loginForm" autocomplete="off">
-            <label for="accessCode">🔑 ACCESS CODE</label>
-            <input
-                type="password"
-                id="accessCode"
-                placeholder="▸ Enter your secret code..."
-                required
-            />
-            <button type="submit" class="btn-login" id="loginBtn">
-                ⚡ LOGIN
-            </button>
+        <form class="login-form" id="loginForm">
+            <label>🔑 ACCESS CODE</label>
+            <input type="password" id="accessCode" placeholder="▸ Enter your secret code..." required />
+            <button type="submit" class="btn-login">⚡ LOGIN</button>
             <div class="loader" id="loader"></div>
             <div class="error-msg" id="errorMsg">⚠️ INVALID ACCESS CODE</div>
             <div class="success-msg" id="successMsg">
                 ✅ ACCESS GRANTED<br>
-                <span style="font-size:14px;font-weight:400;opacity:0.6;">Welcome to BASIT HOST</span>
+                <span style="font-size:16px;font-weight:400;opacity:0.6;">Redirecting to dashboard...</span>
             </div>
         </form>
 
-        <!-- Footer -->
         <div class="terminal-footer">
             <span>⚠️ UNAUTHORIZED ACCESS PROHIBITED</span>
             <span>𝗕𝗔𝗦𝗜𝗧 𝗛𝗢𝗦𝗧 • SECURE SYSTEMS</span>
         </div>
-
     </div>
 
-    <!-- ============================================
-    JAVASCRIPT
-    ============================================ -->
     <script>
+        // Matrix Rain Effect
         (function() {
-            'use strict';
+            const bg = document.getElementById('matrixBg');
+            const chars = '0123456789ABCDEF';
+            for (let i = 0; i < 80; i++) {
+                const span = document.createElement('span');
+                span.textContent = chars[Math.floor(Math.random() * chars.length)];
+                span.style.left = Math.random() * 100 + '%';
+                span.style.fontSize = (10 + Math.random() * 20) + 'px';
+                span.style.animationDuration = (5 + Math.random() * 15) + 's';
+                span.style.animationDelay = (Math.random() * 15) + 's';
+                span.style.opacity = 0.3 + Math.random() * 0.5;
+                bg.appendChild(span);
+            }
+        })();
 
+        // Login
+        (function() {
             const form = document.getElementById('loginForm');
             const input = document.getElementById('accessCode');
             const errorMsg = document.getElementById('errorMsg');
             const successMsg = document.getElementById('successMsg');
             const loader = document.getElementById('loader');
-            const loginBtn = document.getElementById('loginBtn');
+            const loginBtn = document.querySelector('.btn-login');
 
-            // ============================================
-            // 🔥 ACCESS CODE (Yahan apna code daalo)
-            // ============================================
-            const SECRET_CODE = 'BASIT2026';  // 🔥 CHANGE THIS
+            const SECRET_CODE = 'BASIT2026';
 
-            // ============================================
-            // FORM SUBMIT HANDLER
-            // ============================================
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-
                 const enteredCode = input.value.trim();
 
-                // Hide previous messages
                 errorMsg.classList.remove('show');
                 successMsg.classList.remove('show');
                 loader.classList.remove('show');
 
-                // Show loader
                 loader.classList.add('show');
                 loginBtn.disabled = true;
                 loginBtn.style.opacity = '0.5';
 
-                // Simulate network delay
                 setTimeout(function() {
                     loader.classList.remove('show');
                     loginBtn.disabled = false;
                     loginBtn.style.opacity = '1';
 
                     if (enteredCode === SECRET_CODE) {
-                        // ✅ Success
                         successMsg.classList.add('show');
                         errorMsg.classList.remove('show');
-
-                        // Redirect after 1.5 seconds
                         setTimeout(function() {
-                            // 🔥 Redirect to dashboard
-                            window.location.href = '/dashboard';
+                            window.location.href = '/dashboard.html';
                         }, 1500);
-
                     } else {
-                        // ❌ Error
                         errorMsg.classList.add('show');
                         successMsg.classList.remove('show');
-
-                        // Shake animation
                         form.style.animation = 'shake 0.4s ease';
-                        setTimeout(function() {
-                            form.style.animation = '';
-                        }, 500);
-
-                        // Clear input
+                        setTimeout(function() { form.style.animation = ''; }, 500);
                         input.value = '';
                         input.focus();
                     }
                 }, 1200);
             });
 
-            // ============================================
-            // SHAKE ANIMATION (for error)
-            // ============================================
             const styleShake = document.createElement('style');
             styleShake.textContent = `
                 @keyframes shake {
                     0%, 100% { transform: translateX(0); }
-                    20% { transform: translateX(-12px); }
-                    40% { transform: translateX(12px); }
-                    60% { transform: translateX(-8px); }
-                    80% { transform: translateX(8px); }
+                    20% { transform: translateX(-15px); }
+                    40% { transform: translateX(15px); }
+                    60% { transform: translateX(-10px); }
+                    80% { transform: translateX(10px); }
                 }
             `;
             document.head.appendChild(styleShake);
-
-            // ============================================
-            // AUTO FOCUS ON INPUT
-            // ============================================
             input.focus();
-
         })();
     </script>
-
 </body>
 </html>
