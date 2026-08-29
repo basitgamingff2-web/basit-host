@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>BASIT HOST</title>
+    <style>
+        /* ============================================
+           RESET & BASE
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0e14;
+            color: #00ff88;
+            font-family: 'Courier New', monospace;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ============================================
+           BACKGROUND GLOW EFFECTS
+           ============================================ */
+        .bg-glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .bg-glow.g1 {
+            width: 500px;
+            height: 500px;
+            top: -100px;
+            left: -100px;
+            background: #00ff88;
+        }
+        .bg-glow.g2 {
+            width: 400px;
+            height: 400px;
+            bottom: -100px;
+            right: -100px;
+            background: #00aaff;
+        }
+        .bg-glow.g3 {
+            width: 300px;
+            height: 300px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #ff00aa;
+        }
+
+        /* ============================================
+           TERMINAL CONTAINER
+           ============================================ */
+        .terminal {
+            background: rgba(10, 14, 20, 0.92);
+            border: 1px solid rgba(0, 255, 136, 0.25);
+            border-radius: 16px;
+            padding: 30px 40px 40px 40px;
+            width: 520px;
+            max-width: 94vw;
+            box-shadow: 0 0 60px rgba(0, 255, 136, 0.08), inset 0 0 60px rgba(0, 255, 136, 0.03);
+            backdrop-filter: blur(12px);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.15);
+            padding-bottom: 14px;
+            margin-bottom: 22px;
+        }
+        .terminal-title {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #00ff88;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+        .terminal-title span {
+            color: #ffffff;
+            opacity: 0.4;
+            font-weight: 300;
+        }
+        .terminal-dots {
+            display: flex;
+            gap: 8px;
+        }
+        .terminal-dots span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        /* ============================================
+           VERSION TAG
+           ============================================ */
+        .version-tag {
+            text-align: center;
+            font-size: 11px;
+            color: rgba(0, 255, 136, 0.4);
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 255, 136, 0.08);
+            padding: 6px 0;
+            border-radius: 6px;
+            background: rgba(0, 255, 136, 0.03);
+        }
+
+        /* ============================================
+           ACCESS PROMPT
+           ============================================ */
+        .access-prompt {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 28px;
+        }
+        .access-prompt .line {
+            font-size: 15px;
+            letter-spacing: 1px;
+            opacity: 0.7;
+        }
+        .access-prompt .line.highlight {
+            color: #ffffff;
+            opacity: 1;
+            font-weight: 600;
+        }
+        .access-prompt .line .cursor-blink {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: #00ff88;
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+            margin-left: 2px;
+        }
+
+        /* ============================================
+           LOGIN FORM
+           ============================================ */
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 6px;
+        }
+        .login-form label {
+            font-size: 13px;
+            color: rgba(0, 255, 136, 0.5);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .login-form input {
+            background: rgba(0, 255, 136, 0.04);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-size: 16px;
+            color: #00ff88;
+            font-family: 'Courier New', monospace;
+            outline: none;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+        .login-form input:focus {
+            border-color: #00ff88;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.08);
+            background: rgba(0, 255, 136, 0.07);
+        }
+        .login-form input::placeholder {
+            color: rgba(0, 255, 136, 0.2);
+        }
+
+        /* ============================================
+           BUTTONS
+           ============================================ */
+        .btn-login {
+            background: rgba(0, 255, 136, 0.06);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #00ff88;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            margin-top: 6px;
+        }
+        .btn-login:hover {
+            background: rgba(0, 255, 136, 0.12);
+            border-color: #00ff88;
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.1);
+        }
+        .btn-login:active {
+            transform: scale(0.97);
+        }
+
+        /* ============================================
+           ERROR MESSAGE
+           ============================================ */
+        .error-msg {
+            color: #ff4757;
+            font-size: 13px;
+            text-align: center;
+            margin-top: 6px;
+            height: 24px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            letter-spacing: 1px;
+        }
+        .error-msg.show {
+            opacity: 1;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .terminal-footer {
+            border-top: 1px solid rgba(0, 255, 136, 0.08);
+            padding-top: 16px;
+            margin-top: 22px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: rgba(0, 255, 136, 0.25);
+            letter-spacing: 1px;
+        }
+        .terminal-footer span {
+            color: rgba(0, 255, 136, 0.4);
+        }
+
+        /* ============================================
+           ANIMATIONS
+           ============================================ */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 550px) {
+            .terminal {
+                padding: 20px;
+                border-radius: 12px;
+            }
+            .terminal-title {
+                font-size: 16px;
+            }
+            .access-prompt .line {
+                font-size: 13px;
+            }
+            .login-form input {
+                font-size: 14px;
+                padding: 12px 14px;
+            }
+            .btn-login {
+                font-size: 14px;
+                padding: 12px;
+            }
+        }
+
+        /* ============================================
+           LOADING SPINNER
+           ============================================ */
+        .loader {
+            display: none;
+            margin: 10px auto 0;
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(0, 255, 136, 0.1);
+            border-top: 3px solid #00ff88;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        .loader.show {
+            display: block;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ============================================
+           SUCCESS MESSAGE
+           ============================================ */
+        .success-msg {
+            display: none;
+            text-align: center;
+            color: #00ff88;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            padding: 20px 0;
+            animation: fadeIn 0.6s ease;
+        }
+        .success-msg.show {
+            display: block;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================
+    BACKGROUND GLOW
+    ============================================ -->
+    <div class="bg-glow g1"></div>
+    <div class="bg-glow g2"></div>
+    <div class="bg-glow g3"></div>
+
+    <!-- ============================================
+    TERMINAL
+    ============================================ -->
+    <div class="terminal" id="terminal">
+
+        <!-- Header -->
+        <div class="terminal-header">
+            <div class="terminal-title">
+                𝗕𝗔𝗦𝗜𝗧 𝗛𝗢𝗦𝗧 <span>// SECURE</span>
+            </div>
+            <div class="terminal-dots">
+                <span class="dot-red"></span>
+                <span class="dot-yellow"></span>
+                <span class="dot-green"></span>
+            </div>
+        </div>
+
+        <!-- Version -->
+        <div class="version-tag">
+            ⚡ SECURE TERMINAL v3.0 ⚡
+        </div>
+
+        <!-- Access Prompt -->
+        <div class="access-prompt">
+            <div class="line highlight">> ACCESS_REQUEST</div>
+            <div class="line" style="opacity:0.3;">• ENTER ACCESS CODE •</div>
+        </div>
+
+        <!-- Login Form -->
+        <form class="login-form" id="loginForm" autocomplete="off">
+            <label for="accessCode">🔑 ACCESS CODE</label>
+            <input
+                type="password"
+                id="accessCode"
+                placeholder="▸ Enter your secret code..."
+                required
+            />
+            <button type="submit" class="btn-login" id="loginBtn">
+                ⚡ LOGIN
+            </button>
+            <div class="loader" id="loader"></div>
+            <div class="error-msg" id="errorMsg">⚠️ INVALID ACCESS CODE</div>
+            <div class="success-msg" id="successMsg">
+                ✅ ACCESS GRANTED<br>
+                <span style="font-size:14px;font-weight:400;opacity:0.6;">Welcome to BASIT HOST</span>
+            </div>
+        </form>
+
+        <!-- Footer -->
+        <div class="terminal-footer">
+            <span>⚠️ UNAUTHORIZED ACCESS PROHIBITED</span>
+            <span>𝗕𝗔𝗦𝗜𝗧 𝗛𝗢𝗦𝗧 • SECURE SYSTEMS</span>
+        </div>
+
+    </div>
+
+    <!-- ============================================
+    JAVASCRIPT
+    ============================================ -->
+    <script>
+        (function() {
+            'use strict';
+
+            const form = document.getElementById('loginForm');
+            const input = document.getElementById('accessCode');
+            const errorMsg = document.getElementById('errorMsg');
+            const successMsg = document.getElementById('successMsg');
+            const loader = document.getElementById('loader');
+            const loginBtn = document.getElementById('loginBtn');
+
+            // ============================================
+            // 🔥 ACCESS CODE (Yahan apna code daalo)
+            // ============================================
+            const SECRET_CODE = 'BASIT2026';  // 🔥 CHANGE THIS
+
+            // ============================================
+            // FORM SUBMIT HANDLER
+            // ============================================
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const enteredCode = input.value.trim();
+
+                // Hide previous messages
+                errorMsg.classList.remove('show');
+                successMsg.classList.remove('show');
+                loader.classList.remove('show');
+
+                // Show loader
+                loader.classList.add('show');
+                loginBtn.disabled = true;
+                loginBtn.style.opacity = '0.5';
+
+                // Simulate network delay
+                setTimeout(function() {
+                    loader.classList.remove('show');
+                    loginBtn.disabled = false;
+                    loginBtn.style.opacity = '1';
+
+                    if (enteredCode === SECRET_CODE) {
+                        // ✅ Success
+                        successMsg.classList.add('show');
+                        errorMsg.classList.remove('show');
+
+                        // Redirect after 1.5 seconds
+                        setTimeout(function() {
+                            // 🔥 Redirect to dashboard
+                            window.location.href = '/dashboard';
+                        }, 1500);
+
+                    } else {
+                        // ❌ Error
+                        errorMsg.classList.add('show');
+                        successMsg.classList.remove('show');
+
+                        // Shake animation
+                        form.style.animation = 'shake 0.4s ease';
+                        setTimeout(function() {
+                            form.style.animation = '';
+                        }, 500);
+
+                        // Clear input
+                        input.value = '';
+                        input.focus();
+                    }
+                }, 1200);
+            });
+
+            // ============================================
+            // SHAKE ANIMATION (for error)
+            // ============================================
+            const styleShake = document.createElement('style');
+            styleShake.textContent = `
+                @keyframes shake {
+                    0%, 100% { transform: translateX(0); }
+                    20% { transform: translateX(-12px); }
+                    40% { transform: translateX(12px); }
+                    60% { transform: translateX(-8px); }
+                    80% { transform: translateX(8px); }
+                }
+            `;
+            document.head.appendChild(styleShake);
+
+            // ============================================
+            // AUTO FOCUS ON INPUT
+            // ============================================
+            input.focus();
+
+        })();
+    </script>
+
+</body>
+</html>
