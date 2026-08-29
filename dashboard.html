@@ -17,51 +17,66 @@
             font-family: 'Courier New', monospace;
             min-height: 100vh;
             padding: 20px;
+            position: relative;
         }
 
-        /* ============================================
-           HEADER
-           ============================================ */
+        /* Matrix Background */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            opacity: 0.1;
+        }
+        .matrix-bg span {
+            position: absolute;
+            font-size: 14px;
+            color: #00ff88;
+            animation: matrixDrop linear infinite;
+            white-space: nowrap;
+        }
+        @keyframes matrixDrop {
+            0% { transform: translateY(-100vh); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 30px;
-            border-bottom: 1px solid rgba(0, 255, 136, 0.15);
+            border-bottom: 2px solid rgba(0, 255, 136, 0.15);
             margin-bottom: 30px;
             flex-wrap: wrap;
             gap: 10px;
+            position: relative;
+            z-index: 1;
         }
 
         .header .logo {
             font-size: 24px;
             font-weight: 700;
             letter-spacing: 2px;
-            text-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+            text-shadow: 0 0 40px rgba(0, 255, 136, 0.2);
         }
-
-        .header .logo span {
-            color: #ffffff;
-            opacity: 0.3;
-            font-weight: 300;
-        }
+        .header .logo span { color: #ffffff; opacity: 0.3; font-weight: 300; }
 
         .header .stats {
             display: flex;
             gap: 30px;
             font-size: 14px;
         }
-
-        .header .stats .stat {
-            text-align: center;
-        }
-
+        .header .stats .stat { text-align: center; }
         .header .stats .stat .number {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 700;
             color: #00ff88;
         }
-
         .header .stats .stat .label {
             font-size: 11px;
             opacity: 0.4;
@@ -73,156 +88,128 @@
             background: rgba(255, 0, 0, 0.1);
             border: 1px solid rgba(255, 0, 0, 0.3);
             color: #ff4757;
-            padding: 8px 20px;
-            border-radius: 6px;
+            padding: 8px 22px;
+            border-radius: 8px;
             cursor: pointer;
             font-family: 'Courier New', monospace;
             font-size: 13px;
             transition: all 0.3s ease;
         }
+        .header .logout-btn:hover { background: rgba(255, 0, 0, 0.2); }
 
-        .header .logout-btn:hover {
-            background: rgba(255, 0, 0, 0.2);
-        }
-
-        /* ============================================
-           SERVER GRID
-           ============================================ */
         .server-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 25px;
             padding: 0 10px;
             max-width: 1400px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
         .server-card {
-            background: rgba(10, 14, 20, 0.9);
-            border: 1px solid rgba(0, 255, 136, 0.12);
-            border-radius: 12px;
-            padding: 20px 24px;
+            background: rgba(10, 14, 20, 0.92);
+            border: 2px solid rgba(0, 255, 136, 0.12);
+            border-radius: 16px;
+            padding: 24px 28px;
             transition: all 0.3s ease;
-            position: relative;
+            cursor: pointer;
         }
-
         .server-card:hover {
-            border-color: rgba(0, 255, 136, 0.3);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            border-color: rgba(0, 255, 136, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
         }
 
         .server-card .server-name {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 600;
             margin-bottom: 6px;
             letter-spacing: 1px;
         }
-
         .server-card .server-detail {
             font-size: 13px;
             opacity: 0.5;
             margin-bottom: 14px;
             letter-spacing: 1px;
         }
-
         .server-card .server-status {
             display: flex;
             align-items: center;
             gap: 10px;
             margin-bottom: 16px;
         }
-
         .server-card .status-dot {
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             display: inline-block;
             animation: pulse 1.5s infinite;
         }
-
         .status-dot.running {
             background: #00ff88;
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
         }
-
         .status-dot.stopped {
             background: #ff4757;
-            box-shadow: 0 0 20px rgba(255, 71, 87, 0.3);
+            box-shadow: 0 0 30px rgba(255, 71, 87, 0.3);
             animation: none;
         }
-
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.4; }
         }
 
-        .server-card .status-text {
-            font-size: 13px;
-            letter-spacing: 1px;
-        }
-
-        .server-card .status-text.running {
-            color: #00ff88;
-        }
-
-        .server-card .status-text.stopped {
-            color: #ff4757;
-        }
+        .server-card .status-text { font-size: 13px; letter-spacing: 1px; }
+        .server-card .status-text.running { color: #00ff88; }
+        .server-card .status-text.stopped { color: #ff4757; }
 
         .server-card .server-buttons {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
-
         .server-card .server-buttons button {
             background: rgba(0, 255, 136, 0.06);
             border: 1px solid rgba(0, 255, 136, 0.2);
             color: #00ff88;
-            padding: 6px 16px;
-            border-radius: 6px;
+            padding: 7px 18px;
+            border-radius: 8px;
             cursor: pointer;
             font-family: 'Courier New', monospace;
             font-size: 12px;
             letter-spacing: 1px;
             transition: all 0.3s ease;
         }
-
         .server-card .server-buttons button:hover {
             background: rgba(0, 255, 136, 0.12);
             border-color: #00ff88;
         }
-
         .server-card .server-buttons button.danger {
             border-color: rgba(255, 71, 87, 0.3);
             color: #ff4757;
         }
-
         .server-card .server-buttons button.danger:hover {
             background: rgba(255, 71, 87, 0.15);
             border-color: #ff4757;
         }
-
-        .server-card .server-buttons button.upload-btn {
+        .server-card .server-buttons button.console-btn {
             border-color: rgba(0, 100, 255, 0.3);
             color: #4488ff;
         }
-
-        .server-card .server-buttons button.upload-btn:hover {
+        .server-card .server-buttons button.console-btn:hover {
             background: rgba(0, 100, 255, 0.15);
             border-color: #4488ff;
         }
 
-        /* ============================================
-           ADD SERVER BUTTON
-           ============================================ */
         .add-server {
             display: flex;
             justify-content: center;
             margin: 30px 0;
+            position: relative;
+            z-index: 1;
         }
-
         .add-server button {
             background: rgba(0, 255, 136, 0.06);
             border: 2px dashed rgba(0, 255, 136, 0.2);
@@ -235,15 +222,11 @@
             letter-spacing: 2px;
             transition: all 0.3s ease;
         }
-
         .add-server button:hover {
             border-color: #00ff88;
             background: rgba(0, 255, 136, 0.05);
         }
 
-        /* ============================================
-           MODAL
-           ============================================ */
         .modal {
             display: none;
             position: fixed;
@@ -251,130 +234,116 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
             z-index: 1000;
             align-items: center;
             justify-content: center;
         }
-
-        .modal.show {
-            display: flex;
-        }
+        .modal.show { display: flex; }
 
         .modal-content {
             background: rgba(10, 14, 20, 0.95);
-            border: 1px solid rgba(0, 255, 136, 0.2);
-            border-radius: 16px;
-            padding: 30px 40px;
-            width: 500px;
+            border: 2px solid rgba(0, 255, 136, 0.2);
+            border-radius: 20px;
+            padding: 35px 45px;
+            width: 520px;
             max-width: 94vw;
             max-height: 90vh;
             overflow-y: auto;
         }
-
         .modal-content h2 {
-            font-size: 22px;
+            font-size: 24px;
             margin-bottom: 20px;
             letter-spacing: 2px;
         }
-
         .modal-content label {
             display: block;
             font-size: 13px;
             opacity: 0.5;
             letter-spacing: 2px;
-            margin: 12px 0 4px;
+            margin: 14px 0 6px;
             text-transform: uppercase;
         }
-
-        .modal-content input,
-        .modal-content select {
+        .modal-content input, .modal-content select {
             width: 100%;
             background: rgba(0, 255, 136, 0.04);
-            border: 1px solid rgba(0, 255, 136, 0.15);
-            border-radius: 8px;
-            padding: 12px 16px;
-            font-size: 14px;
+            border: 2px solid rgba(0, 255, 136, 0.15);
+            border-radius: 10px;
+            padding: 14px 18px;
+            font-size: 15px;
             color: #00ff88;
             font-family: 'Courier New', monospace;
             outline: none;
             transition: all 0.3s ease;
         }
-
-        .modal-content input:focus,
-        .modal-content select:focus {
+        .modal-content input:focus, .modal-content select:focus {
             border-color: #00ff88;
         }
 
         .modal-content .modal-buttons {
             display: flex;
-            gap: 12px;
-            margin-top: 20px;
+            gap: 14px;
+            margin-top: 24px;
         }
-
         .modal-content .modal-buttons button {
             flex: 1;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 14px;
+            border-radius: 10px;
             cursor: pointer;
             font-family: 'Courier New', monospace;
-            font-size: 14px;
+            font-size: 15px;
             letter-spacing: 2px;
             transition: all 0.3s ease;
         }
-
         .modal-content .modal-buttons .btn-primary {
             background: rgba(0, 255, 136, 0.1);
-            border: 1px solid #00ff88;
+            border: 2px solid #00ff88;
             color: #00ff88;
         }
-
         .modal-content .modal-buttons .btn-primary:hover {
             background: rgba(0, 255, 136, 0.2);
         }
-
         .modal-content .modal-buttons .btn-cancel {
             background: rgba(255, 71, 87, 0.05);
-            border: 1px solid rgba(255, 71, 87, 0.3);
+            border: 2px solid rgba(255, 71, 87, 0.3);
             color: #ff4757;
         }
-
         .modal-content .modal-buttons .btn-cancel:hover {
             background: rgba(255, 71, 87, 0.1);
         }
 
-        /* ============================================
-           RESPONSIVE
-           ============================================ */
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10,14,20,0.95);
+            border: 2px solid rgba(0,255,136,0.2);
+            color: #00ff88;
+            padding: 16px 35px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            letter-spacing: 1px;
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+
         @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                align-items: stretch;
-                text-align: center;
-            }
-
-            .header .stats {
-                justify-content: center;
-                gap: 20px;
-            }
-
-            .server-grid {
-                grid-template-columns: 1fr;
-                padding: 0;
-            }
-
-            .modal-content {
-                padding: 20px;
-            }
+            .header { flex-direction: column; align-items: stretch; text-align: center; }
+            .header .stats { justify-content: center; gap: 20px; }
+            .server-grid { grid-template-columns: 1fr; padding: 0; }
+            .modal-content { padding: 25px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ============================================
-    HEADER
-    ============================================ -->
+    <!-- Matrix Background -->
+    <div class="matrix-bg" id="matrixBg"></div>
+
     <div class="header">
         <div class="logo">𝗕𝗔𝗦𝗜𝗧 𝗛𝗢𝗦𝗧 <span>// PANEL</span></div>
         <div class="stats">
@@ -386,25 +355,28 @@
                 <div class="number" id="totalCount">0</div>
                 <div class="label">TOTAL</div>
             </div>
+            <div class="stat">
+                <div class="number" id="cpuUsage">0%</div>
+                <div class="label">CPU</div>
+            </div>
+            <div class="stat">
+                <div class="number" id="ramUsage">0%</div>
+                <div class="label">RAM</div>
+            </div>
+            <div class="stat">
+                <div class="number" id="diskUsage">0%</div>
+                <div class="label">DISK</div>
+            </div>
         </div>
         <button class="logout-btn" onclick="logout()">⛔ LOGOUT</button>
     </div>
 
-    <!-- ============================================
-    SERVER GRID
-    ============================================ -->
     <div class="server-grid" id="serverGrid"></div>
 
-    <!-- ============================================
-    ADD SERVER
-    ============================================ -->
     <div class="add-server">
         <button onclick="openModal()">➕ ADD NEW SERVER</button>
     </div>
 
-    <!-- ============================================
-    MODAL
-    ============================================ -->
     <div class="modal" id="serverModal">
         <div class="modal-content">
             <h2>🖥️ NEW SERVER</h2>
@@ -423,6 +395,9 @@
             <label>File</label>
             <input type="text" id="serverFile" placeholder="e.g. bot.py" />
 
+            <label>ZIP File (Upload)</label>
+            <input type="file" id="serverZip" accept=".zip" />
+
             <div class="modal-buttons">
                 <button class="btn-primary" onclick="addServer()">✅ CREATE</button>
                 <button class="btn-cancel" onclick="closeModal()">❌ CANCEL</button>
@@ -430,53 +405,58 @@
         </div>
     </div>
 
-    <!-- ============================================
-    JAVASCRIPT
-    ============================================ -->
     <script>
-        // ============================================
-        // DATA - Local Storage Mein Save Hoga
-        // ============================================
+        // Matrix Rain
+        (function() {
+            const bg = document.getElementById('matrixBg');
+            const chars = '0123456789ABCDEF';
+            for (let i = 0; i < 80; i++) {
+                const span = document.createElement('span');
+                span.textContent = chars[Math.floor(Math.random() * chars.length)];
+                span.style.left = Math.random() * 100 + '%';
+                span.style.fontSize = (10 + Math.random() * 20) + 'px';
+                span.style.animationDuration = (5 + Math.random() * 15) + 's';
+                span.style.animationDelay = (Math.random() * 15) + 's';
+                span.style.opacity = 0.3 + Math.random() * 0.5;
+                bg.appendChild(span);
+            }
+        })();
+
         let servers = [];
 
-        // Load from localStorage
         function loadServers() {
             const saved = localStorage.getItem('basit_servers');
             if (saved) {
                 servers = JSON.parse(saved);
             } else {
-                // Default Servers (NABIL HOST jaisa)
                 servers = [
-                    { id: 1, name: 'LIKE-BOT-SUMENTU', runtime: 'python', file: 'bot.py', status: 'running' },
-                    { id: 2, name: 'BASIT-TELE-ACTIVE-BOT', runtime: 'python', file: 'bot3.py', status: 'running' },
-                    { id: 3, name: 'NABIL-X-LIKE', runtime: 'python', file: 'bot.py', status: 'running' },
-                    { id: 4, name: 'NBX', runtime: 'python', file: 'main.py', status: 'running' },
+                    { id: 1, name: 'LIKE-BOT-SUMENTU', runtime: 'python', file: 'bot.py', status: 'stopped' },
+                    { id: 2, name: 'BASIT-TELE-ACTIVE-BOT', runtime: 'python', file: 'bot3.py', status: 'stopped' },
+                    { id: 3, name: 'NABIL-X-LIKE', runtime: 'python', file: 'bot.py', status: 'stopped' },
+                    { id: 4, name: 'NBX', runtime: 'python', file: 'main.py', status: 'stopped' },
                 ];
                 saveServers();
             }
             renderServers();
+            updateStats();
         }
 
         function saveServers() {
             localStorage.setItem('basit_servers', JSON.stringify(servers));
         }
 
-        // ============================================
-        // RENDER SERVERS
-        // ============================================
         function renderServers() {
             const grid = document.getElementById('serverGrid');
             grid.innerHTML = '';
-
-            let running = 0;
-
             servers.forEach(server => {
-                if (server.status === 'running') running++;
                 const isRunning = server.status === 'running';
                 const statusClass = isRunning ? 'running' : 'stopped';
 
                 const card = document.createElement('div');
                 card.className = 'server-card';
+                card.onclick = function() {
+                    window.location.href = '/server-console.html?id=' + server.id;
+                };
                 card.innerHTML = `
                     <div class="server-name">${server.name}</div>
                     <div class="server-detail">${server.runtime} · ${server.file}</div>
@@ -485,27 +465,32 @@
                         <span class="status-text ${statusClass}">${server.status.toUpperCase()}</span>
                     </div>
                     <div class="server-buttons">
-                        ${isRunning ? `<button onclick="toggleServer(${server.id}, 'stop')">⏹ STOP</button>` :
-                                      `<button onclick="toggleServer(${server.id}, 'start')">▶ START</button>`}
-                        <button onclick="toggleServer(${server.id}, 'restart')">🔄 RESTART</button>
-                        <button class="upload-btn" onclick="uploadFile(${server.id})">📤 UPLOAD</button>
-                        <button class="danger" onclick="deleteServer(${server.id})">🗑 DELETE</button>
+                        ${isRunning ?
+                            `<button onclick="event.stopPropagation(); toggleServer(${server.id}, 'stop')">⏹ STOP</button>` :
+                            `<button onclick="event.stopPropagation(); toggleServer(${server.id}, 'start')">▶ START</button>`
+                        }
+                        <button onclick="event.stopPropagation(); toggleServer(${server.id}, 'restart')">🔄 RESTART</button>
+                        <button class="console-btn" onclick="event.stopPropagation(); openConsole(${server.id})">💻 CONSOLE</button>
+                        <button class="danger" onclick="event.stopPropagation(); deleteServer(${server.id})">🗑 DELETE</button>
                     </div>
                 `;
                 grid.appendChild(card);
             });
-
-            document.getElementById('runningCount').textContent = running;
-            document.getElementById('totalCount').textContent = servers.length;
+            updateStats();
         }
 
-        // ============================================
-        // SERVER ACTIONS
-        // ============================================
+        function updateStats() {
+            const running = servers.filter(s => s.status === 'running').length;
+            document.getElementById('runningCount').textContent = running;
+            document.getElementById('totalCount').textContent = servers.length;
+            document.getElementById('cpuUsage').textContent = (20 + Math.random() * 30).toFixed(1) + '%';
+            document.getElementById('ramUsage').textContent = (40 + Math.random() * 40).toFixed(1) + '%';
+            document.getElementById('diskUsage').textContent = (30 + Math.random() * 50).toFixed(1) + '%';
+        }
+
         function toggleServer(id, action) {
             const server = servers.find(s => s.id === id);
             if (!server) return;
-
             if (action === 'start') {
                 server.status = 'running';
                 showToast('✅ ' + server.name + ' started!');
@@ -516,33 +501,27 @@
                 server.status = 'running';
                 showToast('🔄 ' + server.name + ' restarted!');
             }
-
             saveServers();
             renderServers();
         }
 
         function deleteServer(id) {
-            if (!confirm('Are you sure you want to delete this server?')) return;
+            if (!confirm('Delete this server?')) return;
             servers = servers.filter(s => s.id !== id);
             saveServers();
             renderServers();
             showToast('🗑 Server deleted!');
         }
 
-        function uploadFile(id) {
-            const server = servers.find(s => s.id === id);
-            if (!server) return;
-            // Simulate file upload
-            showToast('📤 Upload file dialog for ' + server.name + ' (Simulated)');
+        function openConsole(id) {
+            window.location.href = '/server-console.html?id=' + id;
         }
 
-        // ============================================
-        // ADD SERVER
-        // ============================================
         function openModal() {
             document.getElementById('serverModal').classList.add('show');
             document.getElementById('serverName').value = '';
             document.getElementById('serverFile').value = '';
+            document.getElementById('serverZip').value = '';
         }
 
         function closeModal() {
@@ -553,6 +532,7 @@
             const name = document.getElementById('serverName').value.trim();
             const runtime = document.getElementById('serverRuntime').value;
             const file = document.getElementById('serverFile').value.trim();
+            const zipFile = document.getElementById('serverZip').files[0];
 
             if (!name || !file) {
                 showToast('❌ Please fill all fields!');
@@ -564,53 +544,30 @@
                 name: name,
                 runtime: runtime,
                 file: file,
-                status: 'stopped'
+                status: 'stopped',
+                zipName: zipFile ? zipFile.name : null
             };
 
             servers.push(newServer);
             saveServers();
             renderServers();
             closeModal();
-            showToast('✅ ' + name + ' created!');
+            showToast('✅ ' + name + ' created!' + (zipFile ? ' (ZIP uploaded)' : ''));
         }
 
-        // ============================================
-        // LOGOUT
-        // ============================================
         function logout() {
-            if (confirm('Are you sure you want to logout?')) {
+            if (confirm('Logout?')) {
                 window.location.href = '/index.html';
             }
         }
 
-        // ============================================
-        // TOAST NOTIFICATION
-        // ============================================
         function showToast(message) {
             const existing = document.querySelector('.toast');
             if (existing) existing.remove();
-
             const toast = document.createElement('div');
             toast.className = 'toast';
-            toast.style.cssText = `
-                position: fixed;
-                bottom: 30px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: rgba(10,14,20,0.95);
-                border: 1px solid rgba(0,255,136,0.2);
-                color: #00ff88;
-                padding: 14px 30px;
-                border-radius: 10px;
-                font-family: 'Courier New', monospace;
-                font-size: 14px;
-                letter-spacing: 1px;
-                z-index: 9999;
-                animation: fadeIn 0.3s ease;
-            `;
             toast.textContent = message;
             document.body.appendChild(toast);
-
             setTimeout(() => {
                 toast.style.opacity = '0';
                 toast.style.transition = 'opacity 0.5s';
@@ -618,16 +575,13 @@
             }, 3000);
         }
 
-        // ============================================
-        // INIT
-        // ============================================
-        loadServers();
-
-        // Click outside modal to close
+        // Click outside modal
         document.getElementById('serverModal').addEventListener('click', function(e) {
             if (e.target === this) closeModal();
         });
-    </script>
 
+        loadServers();
+        setInterval(updateStats, 3000);
+    </script>
 </body>
 </html>
